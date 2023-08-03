@@ -18,6 +18,7 @@ namespace ProagricaChallenge.DatabaseLayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //This avoids conflict between EntityFrameworkCore.SQL and EntityFrameworkCore.InMemory
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("server=LAPTOP-BNAG8JNC;database=myTvShows;trusted_connection=true;");

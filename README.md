@@ -22,3 +22,7 @@ You can input the folloeing commands:
 -list: gives you all the tv shows.
 -favorites: gives you all the tv shows marked as favorite -[id]: and integer that respresent the id of a tvshow, it favorites or unfavorites said tv show
 -quit: To stop running the app.
+
+In order to run the test go to the root folder and run:
+
+> dotnet test

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProagricaChallenge.DatabaseLayer;
 using ProagricaChallenge.DatabaseLayer.Models;
+using ProagricaChallenge.Exceptions;
 using ProagricaChallenge.RepositoryLayer;
 
 namespace ProagricaChallenge_Tests;
@@ -9,17 +10,19 @@ namespace ProagricaChallenge_Tests;
 [TestClass]
 public class TvShowTest
 {
-    private TvShowDbContext _db = default!;
+    private TvShowDbContext _context = default!;
     private TvShowsRepository _repository = default!;
 
     [TestInitialize]
     public async Task TestInitialize()
     {
+        //the id of the database changes in order to get the ids reset
         DbContextOptions<TvShowDbContext> dbContextOptions =
             new DbContextOptionsBuilder<TvShowDbContext>()
-            .UseInMemoryDatabase("TvShows").Options;
-        _db = new TvShowDbContext(dbContextOptions);
-        _repository = new TvShowsRepository(_db);
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        _context = new TvShowDbContext(dbContextOptions);
+        _repository = new TvShowsRepository(_context);
 
         List<TvShow> tvShows = new List<TvShow>
         {
@@ -44,8 +47,17 @@ public class TvShowTest
                 IsFavorite = false,
             },
         };
-        _db.TvShows.AddRange(tvShows);
-        await _db.SaveChangesAsync();
+
+        _context.TvShows.AddRange(tvShows);
+        await _context.SaveChangesAsync();
+    }
+
+    [TestCleanup]
+    public void Cleanup()
+    {
+        // This removes the database from memory
+        _context.Database.EnsureDeleted(); 
+        _context.Dispose();
     }
 
     [TestMethod]
@@ -53,9 +65,71 @@ public class TvShowTest
     {
         List<TvShow> shows = await _repository.ListTvShows();
         Assert.IsNotNull(shows);
-        foreach (TvShow show in shows)
-        {
-            Console.WriteLine(show.Name);
-        }
+        Assert.AreEqual(4, shows.Count);
+    }
+
+    [TestMethod]
+    public async Task GetShowById_Success()
+    {
+        TvShow show = await _repository.GetTvShowById(1);
+        Assert.IsNotNull(show);
+        Assert.AreEqual("Bocchi the Rock", show.Name);
+        Assert.IsTrue(show.IsFavorite);
+    }
+
+    [TestMethod]
+    [DataRow(0)]
+    [DataRow(10)]
+    [ExpectedException(typeof(TvShowNotFoundException))]
+    public async Task GetShowById_Fail_NotFound(int id)
+    {
+        TvShow show = await _repository.GetTvShowById(id);
+    }
+
+    [TestMethod]
+    [DataRow(-1)]
+    [DataRow(-10)]
+    [ExpectedException(typeof(ArgumentException))]
+    public async Task GetTvShowById_Fail_InvalidId(int id)
+    {
+        TvShow show = await _repository.GetTvShowById(id);
+    }
+
+    [TestMethod]
+    [DataRow(1)]
+    [DataRow(2)]
+    public async Task UpdateById_Success(int id)
+    {
+        TvShow show = await _repository.UpdateTvShowById(id);
+        Assert.IsNotNull(show);
+        Assert.IsFalse(show.IsFavorite);
+    }
+
+    [TestMethod]
+    [DataRow(5)]
+    [DataRow(90)]
+    [ExpectedException(typeof(TvShowNotFoundException))]
+    public async Task UpdateById_Fail(int id)
+    {
+        TvShow show = await _repository.UpdateTvShowById(id);
+    }
+
+    [TestMethod]
+    public async Task GetFavorites_Success()
+    {
+        List<TvShow> tvShows = await _repository.GetFavoriteTvShows();
+        Assert.IsNotNull(tvShows);
+        Assert.AreEqual(2, tvShows.Count);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(NoTvShowSearchResults))]
+    public async Task GetFavorites_Fail_NoFavorites()
+    {
+        TvShow show1 = await _repository.UpdateTvShowById(1);
+        Assert.IsNotNull(show1);
+        TvShow show2 = await _repository.UpdateTvShowById(2);
+        Assert.IsNotNull(show2);
+        List<TvShow> tvShows = await _repository.GetFavoriteTvShows();
     }
 }
