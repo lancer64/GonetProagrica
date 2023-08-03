@@ -1,5 +1,7 @@
-﻿using ProagricaChallenge.DatabaseLayer;
+﻿using Microsoft.EntityFrameworkCore;
+using ProagricaChallenge.DatabaseLayer;
 using ProagricaChallenge.DatabaseLayer.Models;
+using ProagricaChallenge.Exceptions;
 using ProagricaChallenge.RepositoryLayer;
 using ProagricaChallenge.ServiceLayer;
 using System;
@@ -11,8 +13,10 @@ namespace ProagricaChallenge
     {
         static void Main(string[] args)
         {
+
             TvShowDbContext db = new TvShowDbContext();
             TvShowsRepository rep = new TvShowsRepository(db);
+
             PopulateDatabase(rep, db);
 
             TvShowService _service = new TvShowService(rep);
@@ -21,9 +25,12 @@ namespace ProagricaChallenge
 
         private async static void PopulateDatabase(TvShowsRepository _repository, TvShowDbContext _context)
         {
-            List<TvShow> shows = await _repository.ListTvShows();
-            if (shows.Count == 0)
+            List<TvShow> shows = default!;
+            try
             {
+                shows = await _repository.ListTvShows();
+            }
+            catch (NoTvShowSearchResults) {
                 List<TvShow> newShows = new List<TvShow> {
                     new TvShow()
                     {

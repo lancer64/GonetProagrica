@@ -10,10 +10,18 @@ namespace ProagricaChallenge.DatabaseLayer
 {
     public class TvShowDbContext : DbContext
     {
-        public DbSet<TvShow> TvShows { get; set; } = null!;
+        public virtual DbSet<TvShow> TvShows { get; set; } = null!;
+
+        public TvShowDbContext() { }
+
+        public TvShowDbContext(DbContextOptions<TvShowDbContext> options) : base(options) { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=LAPTOP-BNAG8JNC;database=myTvShows;trusted_connection=true;");
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("server=LAPTOP-BNAG8JNC;database=myTvShows;trusted_connection=true;");
+            }
         }
     }
 }

@@ -21,8 +21,9 @@ namespace ProagricaChallenge.ServiceLayer
         public async void RunMenu()
         {
             bool execute = true;
+            Console.WriteLine("Welcome.");
 
-            while(execute)
+            while (execute)
             {
                 try
                 {
@@ -36,11 +37,17 @@ namespace ProagricaChallenge.ServiceLayer
                         try
                         {
                             TvShow tvShow = await _tvShowsRepository.UpdateTvShowById(commandID);
-                            Console.WriteLine(tvShow.Name + " has been updated.");
+                            if(tvShow.IsFavorite)
+                            {
+                                Console.WriteLine($"\"{tvShow.Name}\" was added to Favorites.");
+                            } else
+                            {
+                                Console.WriteLine($"\"{tvShow.Name}\" was removed from Favorites.");
+                            }
                         }
                         catch (TvShowNotFoundException)
                         {
-                            Console.WriteLine("Show does not exist");
+                            Console.WriteLine("This show does not exist");
                         }
                         catch (Exception)
                         {
@@ -70,15 +77,15 @@ namespace ProagricaChallenge.ServiceLayer
                                 }
                                 catch (NoTvShowSearchResults)
                                 {
-                                    Console.WriteLine("There are no TV shows marked as favorite");
+                                    Console.WriteLine("There are no TV shows marked as favorite.");
                                 }
                                 break;
                             case "quit":
-                                Console.WriteLine("Goodbye");
+                                Console.WriteLine("Goodbye.");
                                 execute = false;
                                 break;
                             default:
-                                Console.WriteLine("Command \"" + command + "\" does not exist");
+                                Console.WriteLine($"Command \"{command}\" does not exist.");
                                 break;
                         }
                     }
@@ -92,7 +99,7 @@ namespace ProagricaChallenge.ServiceLayer
         {
             foreach(TvShow tvShow in tvShows)
             {
-                Console.WriteLine(tvShow.Id + ": " + tvShow.Name + (tvShow.IsFavorite ? " *" : ""));
+                Console.WriteLine($"{tvShow.Id}: {tvShow.Name} {(tvShow.IsFavorite ? " *" : "")}");
             }
         }
     }
