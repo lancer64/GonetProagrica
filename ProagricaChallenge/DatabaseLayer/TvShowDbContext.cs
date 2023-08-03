@@ -10,7 +10,7 @@ namespace ProagricaChallenge.DatabaseLayer
 {
     public class TvShowDbContext : DbContext
     {
-        public virtual DbSet<TvShow> TvShows { get; set; } = null!;
+        public DbSet<TvShow> TvShows { get; set; } = null!;
 
         public TvShowDbContext() { }
 

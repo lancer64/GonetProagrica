@@ -62,3 +62,10 @@ D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\
 D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\Microsoft.AspNetCore.Http.Features.dll
 D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Abstractions.dll
 D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\System.Web.Mvc.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\System.Web.Razor.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\System.Web.Helpers.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\System.Web.WebPages.Deployment.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\System.Web.WebPages.Razor.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\System.Web.WebPages.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge\bin\Debug\net6.0\Microsoft.Web.Infrastructure.dll

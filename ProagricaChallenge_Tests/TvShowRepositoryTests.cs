@@ -8,11 +8,15 @@ namespace ProagricaChallenge_Tests;
 
 
 [TestClass]
-public class TvShowTest
+public class TvShowRepositoryTests
 {
     private TvShowDbContext _context = default!;
     private TvShowsRepository _repository = default!;
 
+    /*
+     * UseInMemoryDatabase helps me to test different scenarios without affecting the
+     * database of the application.
+     */
     [TestInitialize]
     public async Task TestInitialize()
     {
@@ -61,7 +65,7 @@ public class TvShowTest
     }
 
     [TestMethod]
-    public async Task GetList_Success()
+    public async Task ListTvShows_Success()
     {
         List<TvShow> shows = await _repository.ListTvShows();
         Assert.IsNotNull(shows);
@@ -69,7 +73,16 @@ public class TvShowTest
     }
 
     [TestMethod]
-    public async Task GetShowById_Success()
+    [ExpectedException(typeof(NoTvShowSearchResults))]
+    public async Task ListTvShows_Fail()
+    {
+        _context.TvShows.RemoveRange(_context.TvShows);
+        await _context.SaveChangesAsync();
+        List<TvShow> shows = await _repository.ListTvShows();
+    }
+
+    [TestMethod]
+    public async Task GetTvShowById_Success()
     {
         TvShow show = await _repository.GetTvShowById(1);
         Assert.IsNotNull(show);
@@ -81,7 +94,7 @@ public class TvShowTest
     [DataRow(0)]
     [DataRow(10)]
     [ExpectedException(typeof(TvShowNotFoundException))]
-    public async Task GetShowById_Fail_NotFound(int id)
+    public async Task GetTvShowById_Fail_NotFound(int id)
     {
         TvShow show = await _repository.GetTvShowById(id);
     }
@@ -98,7 +111,7 @@ public class TvShowTest
     [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
-    public async Task UpdateById_Success(int id)
+    public async Task UpdateTvShowById_Success(int id)
     {
         TvShow show = await _repository.UpdateTvShowById(id);
         Assert.IsNotNull(show);
@@ -109,13 +122,13 @@ public class TvShowTest
     [DataRow(5)]
     [DataRow(90)]
     [ExpectedException(typeof(TvShowNotFoundException))]
-    public async Task UpdateById_Fail(int id)
+    public async Task UpdateTvShowById_Fail_NotFound(int id)
     {
         TvShow show = await _repository.UpdateTvShowById(id);
     }
 
     [TestMethod]
-    public async Task GetFavorites_Success()
+    public async Task GetFavoriteTvShows_Success()
     {
         List<TvShow> tvShows = await _repository.GetFavoriteTvShows();
         Assert.IsNotNull(tvShows);
@@ -124,7 +137,7 @@ public class TvShowTest
 
     [TestMethod]
     [ExpectedException(typeof(NoTvShowSearchResults))]
-    public async Task GetFavorites_Fail_NoFavorites()
+    public async Task GetFavoriteTvShows_Fail_NoFavorites()
     {
         TvShow show1 = await _repository.UpdateTvShowById(1);
         Assert.IsNotNull(show1);

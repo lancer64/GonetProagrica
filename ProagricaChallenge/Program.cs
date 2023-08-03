@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProagricaChallenge.ControllerLayer;
 using ProagricaChallenge.DatabaseLayer;
 using ProagricaChallenge.DatabaseLayer.Models;
 using ProagricaChallenge.Exceptions;
@@ -20,9 +21,11 @@ namespace ProagricaChallenge
             PopulateDatabase(rep, db);
 
             TvShowService _service = new TvShowService(rep);
-            _service.RunMenu();
+            TvShowsController _controller = new TvShowsController(_service);
+            _controller.RunMenu();
         }
 
+        //Initialize the database if it's empty
         private async static void PopulateDatabase(TvShowsRepository _repository, TvShowDbContext _context)
         {
             List<TvShow> shows = default!;
@@ -68,6 +71,7 @@ namespace ProagricaChallenge
                         IsFavorite = false,
                     },
                 };
+
                 foreach (TvShow show in newShows)
                 {
                     _context.TvShows.Add(show);

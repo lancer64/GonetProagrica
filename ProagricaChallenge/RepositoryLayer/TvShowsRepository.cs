@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace ProagricaChallenge.RepositoryLayer;
 
+/*
+ * I use custom Exceptions in order to have a better understanding of the error that
+ * is taking place.
+ */
 public class TvShowsRepository
 {
     private readonly TvShowDbContext _context;
@@ -19,7 +23,7 @@ public class TvShowsRepository
         this._context = tvShowDbContext;
     }
 
-    public virtual async Task<List<TvShow>> GetFavoriteTvShows()
+    public async Task<List<TvShow>> GetFavoriteTvShows()
     {
         List<TvShow> searchResults = await Task.
             FromResult(_context.TvShows.Where(show => show.IsFavorite).ToList());
@@ -30,7 +34,7 @@ public class TvShowsRepository
         throw new NoTvShowSearchResults();
     }
 
-    public virtual async Task<List<TvShow>> ListTvShows()
+    public async Task<List<TvShow>> ListTvShows()
     {
         List < TvShow > searchResults = await Task.FromResult(_context.TvShows.ToList());
         if(searchResults.Count > 0)
@@ -40,7 +44,7 @@ public class TvShowsRepository
         throw new NoTvShowSearchResults();
     }
 
-    public virtual async Task<TvShow> GetTvShowById(int showId)
+    public async Task<TvShow> GetTvShowById(int showId)
     {
         if (showId < 0)
         {
@@ -52,7 +56,7 @@ public class TvShowsRepository
             ?? throw new TvShowNotFoundException();
     }
 
-    public virtual async Task<TvShow> UpdateTvShowById(int showId)
+    public async Task<TvShow> UpdateTvShowById(int showId)
     {
         TvShow tvShow = await GetTvShowById(showId);
         tvShow.IsFavorite = !tvShow.IsFavorite;

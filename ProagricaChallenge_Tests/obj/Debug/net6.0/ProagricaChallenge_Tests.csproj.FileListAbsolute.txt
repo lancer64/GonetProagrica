@@ -154,3 +154,10 @@ D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\obj\Debug\n
 D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\obj\Debug\net6.0\ProagricaChallenge_Tests.pdb
 D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\obj\Debug\net6.0\ProagricaChallenge_Tests.genruntimeconfig.cache
 D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\obj\Debug\net6.0\ref\ProagricaChallenge_Tests.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\bin\Debug\net6.0\System.Web.Mvc.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\bin\Debug\net6.0\System.Web.Razor.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\bin\Debug\net6.0\System.Web.Helpers.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\bin\Debug\net6.0\System.Web.WebPages.Deployment.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\bin\Debug\net6.0\System.Web.WebPages.Razor.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\bin\Debug\net6.0\System.Web.WebPages.dll
+D:\Tutoriales\YouTube\CS\ProagricaChallenge\ProagricaChallenge_Tests\bin\Debug\net6.0\Microsoft.Web.Infrastructure.dll

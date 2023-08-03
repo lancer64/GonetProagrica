@@ -3,13 +3,18 @@ using ProagricaChallenge.Exceptions;
 using ProagricaChallenge.RepositoryLayer;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ProagricaChallenge.ServiceLayer
 {
-    internal class TvShowService
+    /*
+     * Services process the output of the repository in order to return more useful
+     * and understandable information to the user.
+     */
+    public class TvShowService
     {
         private readonly TvShowsRepository _tvShowsRepository = default!;
 
@@ -18,84 +23,56 @@ namespace ProagricaChallenge.ServiceLayer
             _tvShowsRepository = tvShowsRepository;
         }
 
-        public async void RunMenu()
+        public async void ShowTvShows()
         {
-            bool execute = true;
-            Console.WriteLine("Welcome.");
-
-            while (execute)
+            try
             {
-                try
-                {
-                    Console.Write("\n--Type a command: ");
-                    string command = Console.ReadLine() ?? string.Empty; ;
-                    int t;
-                    if (Int32.TryParse(command, out t))
-                    {
-                        int commandID = Convert.ToInt32(command);
-
-                        try
-                        {
-                            TvShow tvShow = await _tvShowsRepository.UpdateTvShowById(commandID);
-                            if(tvShow.IsFavorite)
-                            {
-                                Console.WriteLine($"\"{tvShow.Name}\" was added to Favorites.");
-                            } else
-                            {
-                                Console.WriteLine($"\"{tvShow.Name}\" was removed from Favorites.");
-                            }
-                        }
-                        catch (TvShowNotFoundException)
-                        {
-                            Console.WriteLine("This show does not exist");
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine("Unable to update the TV Show");
-                        }
-                    }
-                    else
-                    {
-                        switch (command)
-                        {
-                            case "list":
-                                try
-                                {
-                                    List<TvShow> tvShows = await _tvShowsRepository.ListTvShows();
-                                    printTvShows(tvShows);
-                                }
-                                catch (NoTvShowSearchResults)
-                                {
-                                    Console.WriteLine("There are no TV shows in the database at this moment");
-                                }
-                                break;
-                            case "favorites":
-                                try
-                                {
-                                    List<TvShow> results = await _tvShowsRepository.GetFavoriteTvShows();
-                                    printTvShows(results);
-                                }
-                                catch (NoTvShowSearchResults)
-                                {
-                                    Console.WriteLine("There are no TV shows marked as favorite.");
-                                }
-                                break;
-                            case "quit":
-                                Console.WriteLine("Goodbye.");
-                                execute = false;
-                                break;
-                            default:
-                                Console.WriteLine($"Command \"{command}\" does not exist.");
-                                break;
-                        }
-                    }
-                } catch(Exception ex) {
-                    Console.WriteLine(ex.ToString());
-                }
+                List<TvShow> tvShows = await _tvShowsRepository.ListTvShows();
+                PrintTvShows(tvShows);
+            }
+            catch (NoTvShowSearchResults)
+            {
+                Console.WriteLine("There are no TV shows in the database at this moment");
             }
         }
 
-        public void printTvShows(List<TvShow> tvShows)
+        public async void ShowFavorites()
+        {
+            try
+            {
+                List<TvShow> results = await _tvShowsRepository.GetFavoriteTvShows();
+                PrintTvShows(results);
+            }
+            catch (NoTvShowSearchResults)
+            {
+                Console.WriteLine("There are no TV shows marked as favorite.");
+            }
+        }
+
+        public async void UpdateTvShow(int id)
+        {
+            try{
+                TvShow tvShow = await _tvShowsRepository.UpdateTvShowById(id);
+                if (tvShow.IsFavorite)
+                {
+                    Console.WriteLine($"\"{tvShow.Name}\" was added to Favorites.");
+                }
+                else
+                {
+                    Console.WriteLine($"\"{tvShow.Name}\" was removed from Favorites.");
+                }
+            }
+                        catch (TvShowNotFoundException)
+            {
+                Console.WriteLine("This show does not exist");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Unable to update the TV Show");
+            }
+        }
+
+        public void PrintTvShows(List<TvShow> tvShows)
         {
             foreach(TvShow tvShow in tvShows)
             {
